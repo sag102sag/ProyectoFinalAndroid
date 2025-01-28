@@ -1,33 +1,33 @@
 package com.example.proyectofinalandroid.datos
 
 import com.example.proyectofinalandroid.dao.ParqueDao
-import com.example.proyectofinalandroid.modelo.EspecieDB
-import com.example.proyectofinalandroid.modelo.ParqueDB
+import com.example.proyectofinalandroid.modelo.EspecieVistaDB
+import com.example.proyectofinalandroid.modelo.ParqueVistoDB
 
 interface ParqueRepositorioDB {
-    suspend fun obtenerEspecie(id: Int): EspecieDB
-    suspend fun obtenerTodasEspecies(): List<EspecieDB>
-    suspend fun insertarEspecie(especieDB: EspecieDB)
-    suspend fun actualizarEspecie(especieDB: EspecieDB)
-    suspend fun eliminarEspecie(especieDB: EspecieDB)
-    suspend fun obtenerParque(id: Int): ParqueDB
-    suspend fun obtenerTodosParques(): List<ParqueDB>
-    suspend fun insertarParque(parqueDB: ParqueDB)
-    suspend fun actualizarParque(parqueDB: ParqueDB)
-    suspend fun eliminarParque(parqueDB: ParqueDB)
+    suspend fun obtenerEspecie(id: Int): EspecieVistaDB
+    suspend fun obtenerTodasEspecies(): List<EspecieVistaDB>
+    suspend fun insertarEspecie(especieVistaDB: EspecieVistaDB)
+    suspend fun actualizarEspecie(especieVistaDB: EspecieVistaDB)
+    suspend fun eliminarEspecie(especieVistaDB: EspecieVistaDB)
+    suspend fun obtenerParque(id: Int): ParqueVistoDB
+    suspend fun obtenerTodosParques(): List<ParqueVistoDB>
+    suspend fun insertarParque(parqueVistoDB: ParqueVistoDB)
+    suspend fun actualizarParque(parqueVistoDB: ParqueVistoDB)
+    suspend fun eliminarParque(parqueVistoDB: ParqueVistoDB)
 }
 
 class ConexionParqueRepositorio(
     private val parqueDao: ParqueDao
 ): ParqueRepositorioDB {
-    override suspend fun obtenerEspecie(id: Int): EspecieDB = parqueDao.obtenerEspecie(id)
-    override suspend fun obtenerTodasEspecies(): List<EspecieDB> = parqueDao.obtenerTodasEspecie()
-    override suspend fun insertarEspecie(especieDB: EspecieDB) = parqueDao.insertarEspecie(especieDB)
-    override suspend fun actualizarEspecie(especieDB: EspecieDB) = parqueDao.actualizarEspecie(especieDB)
-    override suspend fun eliminarEspecie(especieDB: EspecieDB) = parqueDao.eliminarEspecie(especieDB)
-    override suspend fun obtenerParque(id: Int): ParqueDB = parqueDao.obtenerParque(id)
-    override suspend fun obtenerTodosParques(): List<ParqueDB> = parqueDao.obtenerTodosParques()
-    override suspend fun insertarParque(parqueDB: ParqueDB) = parqueDao.insertarParque(parqueDB)
-    override suspend fun actualizarParque(parqueDB: ParqueDB) = parqueDao.actualizarParque(parqueDB)
-    override suspend fun eliminarParque(parqueDB: ParqueDB) = parqueDao.eliminarParque(parqueDB)
+    override suspend fun obtenerEspecie(id: Int): EspecieVistaDB = parqueDao.obtenerEspecie(id)
+    override suspend fun obtenerTodasEspecies(): List<EspecieVistaDB> = parqueDao.obtenerTodasEspecie()
+    override suspend fun insertarEspecie(especieVistaDB: EspecieVistaDB) = parqueDao.insertarEspecie(especieVistaDB)
+    override suspend fun actualizarEspecie(especieVistaDB: EspecieVistaDB) = parqueDao.actualizarEspecie(especieVistaDB)
+    override suspend fun eliminarEspecie(especieVistaDB: EspecieVistaDB) = parqueDao.eliminarEspecie(especieVistaDB)
+    override suspend fun obtenerParque(id: Int): ParqueVistoDB = parqueDao.obtenerParque(id)
+    override suspend fun obtenerTodosParques(): List<ParqueVistoDB> = parqueDao.obtenerTodosParques()
+    override suspend fun insertarParque(parqueVistoDB: ParqueVistoDB) = parqueDao.insertarParque(parqueVistoDB)
+    override suspend fun actualizarParque(parqueVistoDB: ParqueVistoDB) = parqueDao.actualizarParque(parqueVistoDB)
+    override suspend fun eliminarParque(parqueVistoDB: ParqueVistoDB) = parqueDao.eliminarParque(parqueVistoDB)
 }

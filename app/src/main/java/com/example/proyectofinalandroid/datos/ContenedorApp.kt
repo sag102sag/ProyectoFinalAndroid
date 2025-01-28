@@ -9,17 +9,17 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 interface ContenedorApp {
-    val parqueRepositorio: ParqueRepositorioDB
+    val parqueRepositorio: ParqueRepositorio
+    val parqueRepositorioDB: ParqueRepositorioDB
 }
 
 class ParquesContenedorApp(private val context: Context) : ContenedorApp {
 
-    override val parqueRepositorio: ParqueRepositorioDB by lazy {
-        ConexionParqueRepositorio(ParquesBaseDatos.obtenerBaseDatos(context).parqueDao())
-    }
-    private val baseUrl = "http://10.0.2.2:3000"
+    private val baseUrl = "http://10.0.2.2:8080"
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = Json { ignoreUnknownKeys = true
+    coerceInputValues = true}
+
 
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -29,8 +29,12 @@ class ParquesContenedorApp(private val context: Context) : ContenedorApp {
     private val servicioRetrofit: ParquesServicioApi by lazy{
         retrofit.create(ParquesServicioApi::class.java)
     }
-
-    override val parquesRepositorio: ParqueRepositorio by lazy {
+    // Server
+    override val parqueRepositorio: ParqueRepositorio by lazy {
         ConexionParqueRepositorioServer(servicioRetrofit)
+    }
+    // Local
+    override val parqueRepositorioDB: ParqueRepositorioDB by lazy {
+        ConexionParqueRepositorio(ParquesBaseDatos.obtenerBaseDatos(context).parqueDao())
     }
 }

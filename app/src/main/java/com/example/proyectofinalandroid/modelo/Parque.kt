@@ -9,8 +9,9 @@ data class Parque(
     val id: Int,
     @SerialName(value="nombre")
     val nombre: String="",
-    @SerialName(value="descripcion")
-    val descripcion: String="",
-    @SerialName(value="tipo")
-    val tipo: String=""
+    @SerialName(value="extension")
+    val extension: Double=0.0,
+    @SerialName(value="especies")
+    val especies: List<Especie> = listOf()
+
 )

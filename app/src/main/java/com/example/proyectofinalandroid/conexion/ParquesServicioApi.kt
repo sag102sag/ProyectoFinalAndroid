@@ -13,6 +13,11 @@ interface ParquesServicioApi {
     @GET("especies")
     suspend fun obtenerEspecies(): List<Especie>
 
+    @GET("especies/{id}")
+    suspend fun obtenerEspecie(
+        @Path("id") id: Int
+    ): Especie
+
     @POST("especies")
     suspend fun insertarEspecie(
         @Body especie: Especie
@@ -31,6 +36,11 @@ interface ParquesServicioApi {
 
     @GET("parquesnaturales")
     suspend fun obtenerParques(): List<Parque>
+
+    @GET("parques/{id}")
+    suspend fun obtenerParque(
+        @Path("id") id: Int
+    ): Parque
 
     @POST("parquesnaturales")
     suspend fun insertarParque(

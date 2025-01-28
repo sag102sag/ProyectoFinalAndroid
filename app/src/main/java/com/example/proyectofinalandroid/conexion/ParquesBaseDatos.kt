@@ -5,11 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.proyectofinalandroid.dao.ParqueDao
-import com.example.proyectofinalandroid.modelo.EspecieDB
-import com.example.proyectofinalandroid.modelo.ParqueDB
+import com.example.proyectofinalandroid.modelo.EspecieVistaDB
+import com.example.proyectofinalandroid.modelo.ParqueVistoDB
 
 
-@Database(entities = [EspecieDB::class, ParqueDB::class], version = 1, exportSchema = false)
+@Database(entities = [EspecieVistaDB::class, ParqueVistoDB::class], version = 1, exportSchema = false)
 abstract class ParquesBaseDatos: RoomDatabase() {
 
     abstract fun parqueDao(): ParqueDao
