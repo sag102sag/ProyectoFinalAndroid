@@ -15,7 +15,7 @@ interface ContenedorApp {
 
 class ParquesContenedorApp(private val context: Context) : ContenedorApp {
 
-    private val baseUrl = "http://10.0.2.2:8080"
+    private val baseUrl = "http://10.0.2.2:8080/api/"
 
     private val json = Json { ignoreUnknownKeys = true
     coerceInputValues = true}

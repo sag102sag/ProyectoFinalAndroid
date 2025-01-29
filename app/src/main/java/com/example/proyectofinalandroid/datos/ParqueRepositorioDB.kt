@@ -25,6 +25,7 @@ class ConexionParqueRepositorio(
     override suspend fun insertarEspecie(especieVistaDB: EspecieVistaDB) = parqueDao.insertarEspecie(especieVistaDB)
     override suspend fun actualizarEspecie(especieVistaDB: EspecieVistaDB) = parqueDao.actualizarEspecie(especieVistaDB)
     override suspend fun eliminarEspecie(especieVistaDB: EspecieVistaDB) = parqueDao.eliminarEspecie(especieVistaDB)
+
     override suspend fun obtenerParque(id: Int): ParqueVistoDB = parqueDao.obtenerParque(id)
     override suspend fun obtenerTodosParques(): List<ParqueVistoDB> = parqueDao.obtenerTodosParques()
     override suspend fun insertarParque(parqueVistoDB: ParqueVistoDB) = parqueDao.insertarParque(parqueVistoDB)

@@ -5,7 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.proyectofinalandroid.ParquesAplicacion
 import com.example.proyectofinalandroid.datos.ParqueRepositorio
 import com.example.proyectofinalandroid.datos.ParqueRepositorioDB
 import com.example.proyectofinalandroid.modelo.Especie
@@ -165,7 +170,12 @@ class ParquesViewModel(
         }
     }
 
-    fun insertarParque(parque: Parque) {
+    // ------------------------------------------ CRUDS --------------------------------------------
+
+    // PARQUES ---------------------------------------------------------------
+
+    fun insertarParque(parque: Parque)
+    {
         viewModelScope.launch {
             parquesUIState = try {
                 parqueRepositorio.insertarParque(parque)
@@ -184,6 +194,142 @@ class ParquesViewModel(
                 ParquesUIState.ActualizarExito
             } catch (e: Exception) {
                 ParquesUIState.Error
+            }
+        }
+    }
+
+    fun eliminarParque(id: Int)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorio.eliminarParque(id)
+                ParquesUIState.EliminarExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    fun insertarParqueBD(parqueVistoDB: ParqueVistoDB)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorioDB.insertarParque(parqueVistoDB)
+                ParquesUIState.CrearExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    fun actualizarParqueBD(parqueVistoDB: ParqueVistoDB)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorioDB.actualizarParque(parqueVistoDB)
+                ParquesUIState.ActualizarExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    fun eliminarParqueBD(parqueVistoDB: ParqueVistoDB)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorioDB.eliminarParque(parqueVistoDB)
+                ParquesUIState.EliminarExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    // ESPECIES ---------------------------------------------------------------
+
+    fun insertarEspecie(especie: Especie)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorio.insertarEspecie(especie)
+                ParquesUIState.CrearExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    fun actualizarEspecie(id: Int, especie: Especie)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorio.actualizarEspecie(id, especie)
+                ParquesUIState.ActualizarExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    fun eliminarEspecie(id: Int)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorio.eliminarEspecie(id)
+                ParquesUIState.EliminarExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    fun insertarEspecieBD(especieVistaDB: EspecieVistaDB)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorioDB.insertarEspecie(especieVistaDB)
+                ParquesUIState.CrearExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    fun actualizarEspecieBD(especieVistaDB: EspecieVistaDB)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorioDB.actualizarEspecie(especieVistaDB)
+                ParquesUIState.ActualizarExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    fun eliminarEspecie(especieVistaDB: EspecieVistaDB)
+    {
+        viewModelScope.launch {
+            parquesUIState = try {
+                parqueRepositorioDB.eliminarEspecie(especieVistaDB)
+                ParquesUIState.EliminarExito
+            } catch (e: Exception) {
+                ParquesUIState.Error
+            }
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val aplicacion = (this[APPLICATION_KEY] as ParquesAplicacion)
+                val parqueRepositorio = aplicacion.contenedor.parqueRepositorio
+                val parqueRepositorioDB = aplicacion.contenedor.parqueRepositorioDB
+                ParquesViewModel(
+                    parqueRepositorio = parqueRepositorio,
+                    parqueRepositorioDB = parqueRepositorioDB
+                )
             }
         }
     }

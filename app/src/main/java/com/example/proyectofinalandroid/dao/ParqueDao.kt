@@ -11,10 +11,10 @@ import com.example.proyectofinalandroid.modelo.ParqueVistoDB
 
 @Dao
 interface ParqueDao {
-    @Query("SELECT * from Especies WHERE id = :id")
+    @Query("SELECT * from EspeciesVistas WHERE id = :id")
     suspend fun obtenerEspecie(id: Int): EspecieVistaDB
 
-    @Query("SELECT * from Especies ORDER BY nombre ASC")
+    @Query("SELECT * from EspeciesVistas ORDER BY nombre ASC")
     suspend fun obtenerTodasEspecie(): List<EspecieVistaDB>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

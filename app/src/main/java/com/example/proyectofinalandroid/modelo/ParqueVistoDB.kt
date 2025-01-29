@@ -16,5 +16,4 @@ data class ParqueVistoDB (
     val comentario: String="",
     val puntuacion: Double=0.0,
     val favorito: Boolean=false
-
 )
