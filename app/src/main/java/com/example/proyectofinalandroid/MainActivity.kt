@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.proyectofinalandroid.ui.ParquesApp
+import com.example.proyectofinalandroid.ui.pantallas.InsertarParque
 import com.example.proyectofinalandroid.ui.theme.ProyectoFinalAndroidTheme
 
 class MainActivity : ComponentActivity() {

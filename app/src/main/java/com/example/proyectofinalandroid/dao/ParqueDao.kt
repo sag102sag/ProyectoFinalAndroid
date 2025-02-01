@@ -26,10 +26,10 @@ interface ParqueDao {
     @Delete
     suspend fun eliminarEspecie(especieVistaDB: EspecieVistaDB)
 
-    @Query("SELECT * from Parques WHERE id = :id")
+    @Query("SELECT * from ParquesVistos WHERE id = :id")
     suspend fun obtenerParque(id: Int): ParqueVistoDB
 
-    @Query("SELECT * from Parques ORDER BY nombre ASC")
+    @Query("SELECT * from ParquesVistos ORDER BY nombre ASC")
     suspend fun obtenerTodosParques(): List<ParqueVistoDB>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

@@ -12,6 +12,5 @@ data class Parque(
     @SerialName(value="extension")
     val extension: Double=0.0,
     @SerialName(value="especies")
-    val especies: List<Especie> = listOf()
-
+    val especies: List<Especie> = listOf(),
 )

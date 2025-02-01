@@ -60,14 +60,27 @@ import androidx.navigation.compose.rememberNavController
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.DrawerMenu
 import com.example.proyectofinalandroid.modelo.Ruta
+import com.example.proyectofinalandroid.ui.pantallas.EditarEspecie
+import com.example.proyectofinalandroid.ui.pantallas.EditarParque
+import com.example.proyectofinalandroid.ui.pantallas.InsertarParque
+import com.example.proyectofinalandroid.ui.pantallas.ListaEspecies
+import com.example.proyectofinalandroid.ui.pantallas.ListaParques
+import com.example.proyectofinalandroid.ui.pantallas.NuevaVisitaParqueDB
 import com.example.proyectofinalandroid.ui.pantallas.PantallaInicio
+import com.example.proyectofinalandroid.ui.pantallas.ParquesVisitados
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 enum class Pantallas(@StringRes val titulo: Int){
     Inicio(titulo = R.string.inicio),
     ListarParques(titulo= R.string.parques),
+    EditarParque(titulo= R.string.editar_parque),
+    InsertarParque(titulo= R.string.nuevo_parque),
+    InsertarParqueVisitado(titulo= R.string.nueva_visita),
+    ListarParquesVisitados(titulo= R.string.parques_visitados),
+
     ListarEspecies(titulo = R.string.especies),
+    EditarEspecie(titulo = R.string.editarespecie),
     ParquesVisitados(titulo = R.string.parques_visitados),
     EspeciesVistas(titulo = R.string.especies_vistas)
 }
@@ -79,7 +92,7 @@ val listaRutas = listOf(
 )
 
 val menu = arrayOf(
-    DrawerMenu(Icons.Filled.CheckCircle, Pantallas.ParquesVisitados.titulo, Pantallas.ParquesVisitados.name),
+    DrawerMenu(Icons.Filled.CheckCircle, Pantallas.ListarParquesVisitados.titulo, Pantallas.ListarParquesVisitados.name),
     DrawerMenu(Icons.Filled.Check, Pantallas.EspeciesVistas.titulo, Pantallas.EspeciesVistas.name)
 )
 
@@ -95,7 +108,7 @@ fun ParquesApp(
     val pantallaActual = Pantallas.valueOf(
         pilaRetroceso?.destination?.route ?: Pantallas.Inicio.name
     )
-    var selectedItem by remember { mutableIntStateOf(0) }
+    var selectedItem by remember { mutableIntStateOf(1) }
 
     ModalNavigationDrawer(  // --> Esto envuelve todo el scaffold
         drawerState = drawerState,
@@ -165,19 +178,80 @@ fun ParquesApp(
             ) {
                 // Grafo de las rutas
                 composable(route = Pantallas.Inicio.name) {
+                    viewModel.obtenerParques()
                     PantallaInicio(
                         appUIState = uiState
                     )
                 }
+    // ---------------------------- PARQUES ---------------------------------
                 composable(route = Pantallas.ListarParques.name) {
-                    /*PantallaInicio(
 
-                )*/
+                   if(uiState is ParquesUIState.ObtenerExitoParques) {
+                       ListaParques(
+                           listaParques = uiState.parques,
+                           onParquePulsado = {viewModel.actualizarParquePulsado(it)
+                           navController.navigate(Pantallas.EditarParque.name)},
+                           onInsertarNuevoParque = {navController.navigate(Pantallas.InsertarParque.name)},
+                           onAnyadirNuevaVisita = {viewModel.actualizarParquePulsado(it)
+                               navController.navigate(Pantallas.InsertarParqueVisitado.name)}
+                       )
+                   }
+                    viewModel.obtenerParques()
                 }
-                composable(route = Pantallas.ListarEspecies.name) {
-                    /*PantallaInicio(
+                composable(route = Pantallas.EditarParque.name) {
+                    EditarParque(
+                    parque = viewModel.parquePulsado,
+                        onActualizarParque = {viewModel.actualizarParque(it.id, it)
+                        viewModel.obtenerParques()
+                        navController.navigate(Pantallas.ListarParques.name)}
+                )
+                }
+                composable(route = Pantallas.InsertarParque.name) {
+                    viewModel.obtenerParques()
+                    InsertarParque(
+                        onInsertarParque = {viewModel.insertarParque(it)
+                            viewModel.obtenerParques()
+                            navController.navigate(Pantallas.ListarParques.name)}
+                    )
+                }
+                composable(route = Pantallas.InsertarParqueVisitado.name) {
+                    viewModel.obtenerParques()
+                    NuevaVisitaParqueDB(
+                        parque = viewModel.parquePulsado,
+                        onAnyadirParque = {viewModel.insertarParqueBD(it)
+                        navController.navigate(Pantallas.ListarParques.name)}
+                    )
+                }
+                composable(route = Pantallas.ListarParquesVisitados.name) {
+                    viewModel.obtenerParquesVistosDB()
+                    if(uiState is ParquesUIState.ObtenerExitoParquesVistos) {
+                        ParquesVisitados(
+                           // listaParquesVisitados = uiState.parquesVistos
+                        )
+                    }
+                    viewModel.obtenerParques()
+                }
 
-                )*/
+        // ---------------------------- ESPECIES ---------------------------------
+
+                composable(route = Pantallas.ListarEspecies.name) {
+                    viewModel.obtenerEspecies()
+                    if(uiState is ParquesUIState.ObtenerExitoEspecies) {
+                        ListaEspecies(
+                            listaEspecies = uiState.especies,
+                            onEspeciePulsada = { viewModel.actualizarEspeciePulsada(it)
+                            navController.navigate((Pantallas.EditarEspecie.name))}
+                        )
+                    }
+                }
+                composable(route = Pantallas.EditarEspecie.name) {
+                    viewModel.obtenerParques()
+                    EditarEspecie(
+                        especie = viewModel.especiePulsada,
+                        onActualizarEspecie = {viewModel.actualizarEspecie(it.id, it)
+                            viewModel.obtenerEspecies()
+                            navController.navigate(Pantallas.ListarEspecies.name)}
+                    )
                 }
                 composable(route = Pantallas.ParquesVisitados.name) {
                     /*PantallaInicio(

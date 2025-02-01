@@ -6,4 +6,22 @@
     <string name="atras">Atras</string>
     <string name="parques_visitados">Parques visitados</string>
     <string name="especies_vistas">Especies vistas</string>
+    <string name="nombre">Nombre: </string>
+    <string name="extension">Extension</string>
+    <string name="id">ID</string>
+    <string name="insertar_parque">Insertar parque</string>
+    <string name="editar_parque">Editar parque</string>
+    <string name="guardar_cambios">Guardar Cambios</string>
+    <string name="a_adir_especie">Añadir Especie</string>
+    <string name="descripci_n">"\nDescripción: "</string>
+    <string name="tipo">"\nTipo: "</string>
+    <string name="editarespecie">EditarEspecie</string>
+    <string name="nombreBien">"Nombre: "</string>
+    <string name="extensi_n">"\nExtensión: "</string>
+    <string name="a_adir_visita">Añadir visita</string>
+    <string name="a_adir_vista">Añadir vista</string>
+    <string name="descripcion">Descripcion</string>
+    <string name="insertar">Insertar</string>
+    <string name="nuevo_parque">Nuevo Parque</string>
+    <string name="nueva_visita">Nueva Visita</string>
 </resources>

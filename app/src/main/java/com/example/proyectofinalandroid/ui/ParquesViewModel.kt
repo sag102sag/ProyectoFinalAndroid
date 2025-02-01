@@ -60,6 +60,22 @@ class ParquesViewModel(
     init {
         obtenerParques()
         obtenerEspecies()
+
+    }
+
+    fun actualizarParquePulsado(parque: Parque)
+    {
+        parquePulsado=parque
+    }
+
+    fun actualizarEspeciePulsada(especie: Especie)
+    {
+        especiePulsada=especie
+    }
+
+    fun resetUIState()
+    {
+        parquesUIState = ParquesUIState.Cargando
     }
 
     // ------------------------------- OBTENCION DE PARQUES -------------------------------
