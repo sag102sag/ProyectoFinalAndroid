@@ -76,7 +76,7 @@ fun ListaParques(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.width(250.dp)) {
                     Text(
-                        stringResource(R.string.nombreBien) + parque.nombre + stringResource(R.string.extensi_n) + parque.extension,
+                        stringResource(R.string.nombreBien) + parque.nombre + "\n"+ stringResource(R.string.extension) + parque.extension,
                         modifier = Modifier.padding(16.dp)
                     )
                     }

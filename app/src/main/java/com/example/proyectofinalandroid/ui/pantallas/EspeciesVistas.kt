@@ -48,15 +48,19 @@ fun EspeciesVistas(
                     .fillParentMaxWidth()
                     .combinedClickable(
                         onClick = { onEditarEspecieVista(especie) },
-                        onLongClick = { especieVistaAEliminar = especie
-                        mostrarDialogo = true}
+                        onLongClick = {
+                            especieVistaAEliminar = especie
+                            mostrarDialogo = true
+                        }
                     )
 
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.width(250.dp)) {
                         Text(
-                            stringResource(R.string.nombreBien) + especie.nombre + stringResource(R.string.cantidad_vista) + especie.cantidadVista,
+                            stringResource(R.string.nombreBien) + especie.nombre + "\n"+ stringResource(
+                                R.string.cantidad_vistaBien
+                            ) + especie.cantidadVista,
                             modifier = Modifier.padding(16.dp)
                         )
                     }

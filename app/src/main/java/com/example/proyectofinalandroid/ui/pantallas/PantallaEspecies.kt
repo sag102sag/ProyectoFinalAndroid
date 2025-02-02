@@ -67,16 +67,20 @@ fun ListaEspecies(
                     modifier = Modifier
                         .padding(6.dp)
                         .fillParentMaxWidth()
-                        .combinedClickable (
-                            onClick = {onEspeciePulsada(especie)},
-                            onLongClick = {especieAEliminar=especie
-                            mostrarDialogo=true}
+                        .combinedClickable(
+                            onClick = { onEspeciePulsada(especie) },
+                            onLongClick = {
+                                especieAEliminar = especie
+                                mostrarDialogo = true
+                            }
                         )
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(modifier = Modifier.width(250.dp)) {
                             Text(
-                                stringResource(R.string.nombreBien) + especie.nombre + stringResource(R.string.descripci_n) + especie.descripcion+ stringResource(R.string.tipo)+especie.tipo
+                                stringResource(R.string.nombreBien) + especie.nombre + "\n"+stringResource(R.string.descripci_n) + especie.descripcion +"\n"+ stringResource(
+                                    R.string.tipoBien
+                                ) +especie.tipo
                                 ,
                                 modifier = Modifier.padding(16.dp)
                             )
