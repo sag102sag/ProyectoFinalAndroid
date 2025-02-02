@@ -57,9 +57,9 @@ fun ListaParques(
                 )
             }
         }
-    ) { paddingValues ->
+    ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(innerPadding),
 
             ) {
             items(listaParques) { parque ->
