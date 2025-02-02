@@ -22,14 +22,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.Parque
-import com.example.proyectofinalandroid.ui.ParquesUIState
+
 
 @Composable
 fun EditarParque(
     parque: Parque,
     onActualizarParque: (Parque) -> Unit
 ) {
-    var id: Int = parque.id
+    val id: Int = parque.id
     var nombreNuevo by remember { mutableStateOf(parque.nombre) }
     var extensionNueva by remember { mutableStateOf(parque.extension.toString()) }
 
@@ -58,7 +58,7 @@ fun EditarParque(
         Spacer(modifier = Modifier.size(16.dp))
         Row {
             TextField(
-                value = extensionNueva.toString(),
+                value = extensionNueva,
                 label = { Text(stringResource(R.string.extension)) },
                 onValueChange = { extensionNueva = it },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -67,7 +67,7 @@ fun EditarParque(
         }
 
 
-        var parqueActualizado: Parque = Parque(id, nombreNuevo, extensionNueva.toDouble())
+        val parqueActualizado = Parque(id, nombreNuevo, extensionNueva.toDouble())
         Spacer(modifier = Modifier.size(16.dp))
         Row {
             Button(onClick = { onActualizarParque(parqueActualizado) }) {

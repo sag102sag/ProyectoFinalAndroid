@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardOptions
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -18,18 +18,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.Especie
-import com.example.proyectofinalandroid.modelo.Parque
+
 
 @Composable
 fun EditarEspecie(
     especie: Especie,
     onActualizarEspecie: (Especie) -> Unit
 ) {
-    var id: Int = especie.id
+    val id: Int = especie.id
     var nombreNuevo by remember { mutableStateOf(especie.nombre) }
     var descripcionNueva by remember { mutableStateOf(especie.descripcion) }
     var tipoNuevo by remember { mutableStateOf(especie.tipo) }
@@ -57,7 +56,7 @@ fun EditarEspecie(
         Spacer(modifier = Modifier.size(16.dp))
         Row {
             TextField(
-                value = descripcionNueva.toString(),
+                value = descripcionNueva,
                 label = { Text(stringResource(R.string.descripcion)) },
                 onValueChange = { descripcionNueva = it },
             )
@@ -72,7 +71,7 @@ fun EditarEspecie(
         }
 
 
-        var especieActualizada: Especie = Especie(id, nombreNuevo, descripcionNueva, tipoNuevo)
+        val especieActualizada = Especie(id, nombreNuevo, descripcionNueva, tipoNuevo)
         Spacer(modifier = Modifier.size(16.dp))
         Row {
             Button(onClick = {onActualizarEspecie(especieActualizada)}) {

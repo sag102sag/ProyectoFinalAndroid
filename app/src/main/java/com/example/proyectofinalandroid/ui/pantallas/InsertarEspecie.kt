@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -18,17 +17,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
-import com.example.proyectofinalandroid.modelo.Parque
+import com.example.proyectofinalandroid.modelo.Especie
 
 @Composable
-fun InsertarParque(
-    onInsertarParque: (Parque) -> Unit
+fun InsertarEspecie(
+    onInsertarEspecie: (Especie) -> Unit
 ) {
     var nombreNuevo by remember { mutableStateOf("") }
-    var extensionNueva by remember { mutableStateOf("0.0") }
+    var descripcionNueva by remember { mutableStateOf("") }
+    var tipoNuevo by remember { mutableStateOf("") }
 
     Column (modifier = Modifier
         .fillMaxWidth()
@@ -44,19 +43,26 @@ fun InsertarParque(
         Spacer(modifier = Modifier.size(16.dp))
         Row {
             TextField(
-                value = extensionNueva,
-                label = { Text(stringResource(R.string.extension)) },
-                onValueChange = { extensionNueva = it },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                value = descripcionNueva,
+                label = { Text(stringResource(R.string.descripci_n)) },
+                onValueChange = { descripcionNueva = it },
+                maxLines = 1
+            )
+        }
+        Row {
+            TextField(
+                value = tipoNuevo,
+                label = { Text(stringResource(R.string.tipo)) },
+                onValueChange = { tipoNuevo = it },
                 maxLines = 1
             )
         }
 
 
-        val nuevoParque = Parque(9999, nombreNuevo, extensionNueva.toDoubleOrNull()?: 0.0)
+        val nuevaEspecie = Especie(9999, nombreNuevo, descripcionNueva, tipoNuevo)
         Spacer(modifier = Modifier.size(16.dp))
         Row {
-            Button(onClick = {onInsertarParque(nuevoParque)}) {
+            Button(onClick = {onInsertarEspecie(nuevaEspecie)}) {
                 Text(stringResource(R.string.insertar))
             }
         }

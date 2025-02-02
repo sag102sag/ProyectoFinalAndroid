@@ -12,6 +12,6 @@ data class EspecieVistaDB (
     val tipo: String="",
     val fechaVisto: String="",
     val comentario: String="",
-    val puntuacion: Double=0.0,
+    val cantidadVista: Int=0,
     val favorito: Boolean=false
 )

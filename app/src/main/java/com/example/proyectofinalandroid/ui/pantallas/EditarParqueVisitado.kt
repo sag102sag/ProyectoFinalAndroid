@@ -29,26 +29,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
-import com.example.proyectofinalandroid.modelo.Parque
 import com.example.proyectofinalandroid.modelo.ParqueVistoDB
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Composable
-fun NuevaVisitaParqueDB(
-    parque: Parque,
-    onAnyadirParque: (ParqueVistoDB) -> Unit
-)
-{
-    val nombre by remember { mutableStateOf(parque.nombre) }
-    val extension by remember { mutableStateOf(parque.extension.toString()) }
+fun EditarParqueVisitado(
+    parque: ParqueVistoDB,
+    onActualizarParque: (ParqueVistoDB) -> Unit
+) {
+    val id: Int = parque.id
     var fechaElegida: Long? by remember  { mutableStateOf(null)}
-    var fechaFinal by remember { mutableStateOf("") }
+    var fechaFinal by remember { mutableStateOf(parque.fechaVisto) }
     var botonFechaPulsado by remember { mutableStateOf(false) }
-    var comentarios by remember { mutableStateOf("") }
-    var favorito by remember { mutableStateOf(false) }
-    var puntuacionFinal by remember { mutableStateOf(0.0) }
+    var comentarios by remember { mutableStateOf(parque.comentario) }
+    var favorito by remember { mutableStateOf(parque.favorito) }
+    var puntuacionFinal by remember { mutableStateOf(parque.puntuacion) }
     var puedeBajar by remember { mutableStateOf(false) }
     var puedeSubir by remember { mutableStateOf(false) }
 
@@ -64,7 +61,7 @@ fun NuevaVisitaParqueDB(
 
         Row {
             TextField(
-                value = nombre,
+                value = parque.nombre,
                 label = { Text(text = stringResource(R.string.nombre)) },
                 onValueChange = {},
                 enabled = false,
@@ -73,7 +70,7 @@ fun NuevaVisitaParqueDB(
         }
         Row {
             TextField(
-                value = extension,
+                value = parque.extension.toString(),
                 label = { Text(text = stringResource(R.string.extension)) },
                 onValueChange = {},
                 enabled = false,
@@ -124,7 +121,7 @@ fun NuevaVisitaParqueDB(
         }
 
         if(botonFechaPulsado){
-            DatePickerMostrado(
+            DatePickerMostrado2(
                 onConfirm = { fecha ->
                     fechaElegida = fecha
                     botonFechaPulsado = false
@@ -156,11 +153,14 @@ fun NuevaVisitaParqueDB(
             )
         }
 
-        val nuevoParqueVistoDB = ParqueVistoDB(nombre = nombre, extension = extension.toDouble(), comentario = comentarios, fechaVisto = fechaFinal, puntuacion = puntuacionFinal, favorito = favorito)
-
+        val nuevoParqueVistoDB = ParqueVistoDB(id=id, nombre = parque.nombre, extension = parque.extension, comentario = comentarios, fechaVisto = fechaFinal, puntuacion = puntuacionFinal, favorito = favorito)
+        Text(nuevoParqueVistoDB.comentario)
+        Text(nuevoParqueVistoDB.fechaVisto)
+        Text(nuevoParqueVistoDB.puntuacion.toString())
+        Text(nuevoParqueVistoDB.favorito.toString())
         Row {
-            Button(onClick = { onAnyadirParque(nuevoParqueVistoDB) }) {
-                Text(stringResource(R.string.a_adir_visita))
+            Button(onClick = { onActualizarParque(nuevoParqueVistoDB) }) {
+                Text(stringResource(R.string.actualizar))
             }
         }
     }
@@ -168,7 +168,7 @@ fun NuevaVisitaParqueDB(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerMostrado(
+fun DatePickerMostrado2(
     onConfirm: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {

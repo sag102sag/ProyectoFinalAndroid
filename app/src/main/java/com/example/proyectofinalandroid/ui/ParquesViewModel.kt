@@ -73,10 +73,16 @@ class ParquesViewModel(
         especiePulsada=especie
     }
 
-    fun resetUIState()
+    fun actualizarParqueDBPulsado(parque: ParqueVistoDB)
     {
-        parquesUIState = ParquesUIState.Cargando
+        parqueVistoDBPulsado=parque
     }
+
+    fun actualizarEspecieDBPulsada(especie: EspecieVistaDB)
+    {
+        especieVistaDBPulsada=especie
+    }
+
 
     // ------------------------------- OBTENCION DE PARQUES -------------------------------
 
@@ -161,7 +167,7 @@ class ParquesViewModel(
     }
 
     // INTERNOS
-    fun obtenerEspeciesVistas()
+    fun obtenerEspeciesVistasDB()
     {
         viewModelScope.launch {
             parquesUIState = try {
@@ -324,7 +330,7 @@ class ParquesViewModel(
         }
     }
 
-    fun eliminarEspecie(especieVistaDB: EspecieVistaDB)
+    fun eliminarEspecieVista(especieVistaDB: EspecieVistaDB)
     {
         viewModelScope.launch {
             parquesUIState = try {

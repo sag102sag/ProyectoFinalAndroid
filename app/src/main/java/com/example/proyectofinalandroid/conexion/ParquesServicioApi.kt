@@ -2,6 +2,7 @@ package com.example.proyectofinalandroid.conexion
 
 import com.example.proyectofinalandroid.modelo.Especie
 import com.example.proyectofinalandroid.modelo.Parque
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -32,7 +33,7 @@ interface ParquesServicioApi {
     @DELETE("especies/{id}")
     suspend fun eliminarEspecie(
         @Path("id") id: Int
-    ): Especie
+    ): Response<Unit>
 
     @GET("parques")
     suspend fun obtenerParques(): List<Parque>
@@ -56,5 +57,5 @@ interface ParquesServicioApi {
     @DELETE("parques/{id}")
     suspend fun eliminarParque(
         @Path("id") id: Int
-    ): Parque
+    ): Response<Unit>
 }

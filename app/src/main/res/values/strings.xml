@@ -24,4 +24,26 @@
     <string name="insertar">Insertar</string>
     <string name="nuevo_parque">Nuevo Parque</string>
     <string name="nueva_visita">Nueva Visita</string>
+    <string name="elegir_d_a">Elegir día</string>
+    <string name="ninguna_fecha_seleccionada">Ninguna fecha seleccionada</string>
+    <string name="fecha_seleccionada">"Fecha seleccionada: "</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="comentarios">"Comentarios: "</string>
+    <string name="fecha_de_visita">Fecha de visita</string>
+    <string name="puntuaci_n">Puntuación:</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="editar_visita">Editar visita</string>
+    <string name="favorito">Favorito</string>
+    <string name="no_favorito">No Favorito</string>
+    <string name="insertar_especie_vista">Insertar Especie Vista</string>
+    <string name="a_adir_avistamiento">Añadir avistamiento</string>
+    <string name="cantidad_vista">"\nCantidad vista: "</string>
+    <string name="actualizar_avistamiento">Actualizar Avistamiento</string>
+    <string name="editar_avistamiento">Editar Avistamiento</string>
+    <string name="nueva_especie">Nueva Especie</string>
+    <string name="eliminar_avistamiento">Eliminar avistamiento</string>
+    <string name="est_seguro_de_eliminar_a">"¿Está seguro de eliminar a "</string>
+    <string name="eliminar_visita">Eliminar visita</string>
+    <string name="est_seguro_de_eliminar_la_visita_a">"¿Está seguro de eliminar la visita a "</string>
 </resources>

@@ -9,15 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,31 +24,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
-import com.example.proyectofinalandroid.modelo.Parque
-import com.example.proyectofinalandroid.modelo.ParqueVistoDB
+import com.example.proyectofinalandroid.modelo.EspecieVistaDB
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Composable
-fun NuevaVisitaParqueDB(
-    parque: Parque,
-    onAnyadirParque: (ParqueVistoDB) -> Unit
+fun EditarEspecieVista(
+    especie: EspecieVistaDB,
+    onActualizarAvistamiento: (EspecieVistaDB) -> Unit
 )
 {
-    val nombre by remember { mutableStateOf(parque.nombre) }
-    val extension by remember { mutableStateOf(parque.extension.toString()) }
+    val nombre by remember { mutableStateOf(especie.nombre) }
+    val descripcion by remember { mutableStateOf(especie.descripcion) }
+    val tipo by remember { mutableStateOf(especie.tipo) }
     var fechaElegida: Long? by remember  { mutableStateOf(null)}
-    var fechaFinal by remember { mutableStateOf("") }
+    var fechaFinal by remember { mutableStateOf(especie.fechaVisto) }
     var botonFechaPulsado by remember { mutableStateOf(false) }
-    var comentarios by remember { mutableStateOf("") }
-    var favorito by remember { mutableStateOf(false) }
-    var puntuacionFinal by remember { mutableStateOf(0.0) }
+    var comentarios by remember { mutableStateOf(especie.comentario) }
+    var favorito by remember { mutableStateOf(especie.favorito) }
+    var cantidadVista by remember { mutableStateOf(especie.cantidadVista) }
     var puedeBajar by remember { mutableStateOf(false) }
-    var puedeSubir by remember { mutableStateOf(false) }
 
-    if (puntuacionFinal==0.0) puedeBajar=false else puedeBajar=true
-    if (puntuacionFinal==5.0) puedeSubir=false else puedeSubir=true
+    if (cantidadVista==1) puedeBajar=false else puedeBajar=true
+
 
     Column(
         modifier = Modifier
@@ -73,8 +67,18 @@ fun NuevaVisitaParqueDB(
         }
         Row {
             TextField(
-                value = extension,
-                label = { Text(text = stringResource(R.string.extension)) },
+                value = descripcion,
+                label = { Text(text = stringResource(R.string.descripci_n)) },
+                onValueChange = {},
+                enabled = false,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        Row {
+            TextField(
+                value = tipo,
+                label = { Text(text = stringResource(R.string.tipo)) },
                 onValueChange = {},
                 enabled = false,
                 modifier = Modifier.padding(16.dp)
@@ -93,8 +97,8 @@ fun NuevaVisitaParqueDB(
         Row {
             Column (modifier = Modifier.width(160.dp)){
                 TextField(
-                    value = puntuacionFinal.toString(),
-                    label = { Text(stringResource(R.string.puntuaci_n)) },
+                    value = cantidadVista.toString(),
+                    label = { Text(stringResource(R.string.cantidad_vista)) },
                     onValueChange = {},
                     enabled = false,
                     modifier = Modifier.padding(16.dp)
@@ -103,10 +107,10 @@ fun NuevaVisitaParqueDB(
             }
             Column(modifier = Modifier.width(150.dp), verticalArrangement = Arrangement.Center){
                 Row (verticalAlignment = Alignment.CenterVertically){
-                    Button(onClick = {puntuacionFinal-=0.5}, enabled = puedeBajar, modifier = Modifier.padding(5.dp)) {
+                    Button(onClick = {cantidadVista-=1}, enabled = puedeBajar, modifier = Modifier.padding(5.dp)) {
                         Text("-")
                     }
-                    Button(onClick = {puntuacionFinal+=0.5}, enabled = puedeSubir, modifier = Modifier.padding(5.dp)) {
+                    Button(onClick = {cantidadVista+=1}, modifier = Modifier.padding(5.dp)) {
                         Text("+")
                     }
                 }
@@ -156,40 +160,13 @@ fun NuevaVisitaParqueDB(
             )
         }
 
-        val nuevoParqueVistoDB = ParqueVistoDB(nombre = nombre, extension = extension.toDouble(), comentario = comentarios, fechaVisto = fechaFinal, puntuacion = puntuacionFinal, favorito = favorito)
+        val especieNuevaDB = EspecieVistaDB(id = especie.id, nombre = nombre, descripcion = descripcion, tipo = tipo, comentario = comentarios, fechaVisto = fechaFinal, cantidadVista = cantidadVista, favorito = favorito)
 
         Row {
-            Button(onClick = { onAnyadirParque(nuevoParqueVistoDB) }) {
-                Text(stringResource(R.string.a_adir_visita))
+            Button(onClick = { onActualizarAvistamiento(especieNuevaDB) }) {
+                Text(stringResource(R.string.actualizar_avistamiento))
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerMostrado(
-    onConfirm: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
-    val datePickerState = rememberDatePickerState()
-
-    DatePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = {
-                onConfirm(datePickerState.selectedDateMillis)
-                onDismiss()
-            }) {
-                Text(stringResource(R.string.aceptar))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.cancelar))
-            }
-        }
-    ) {
-        DatePicker(state = datePickerState)
-    }
-}

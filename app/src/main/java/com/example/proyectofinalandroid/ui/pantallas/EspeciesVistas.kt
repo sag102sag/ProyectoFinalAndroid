@@ -25,47 +25,45 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
-import com.example.proyectofinalandroid.modelo.ParqueVistoDB
+import com.example.proyectofinalandroid.modelo.EspecieVistaDB
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ParquesVisitados(
-    listaParquesVisitados: List<ParqueVistoDB>,
-    onEditarParque: (ParqueVistoDB) -> Unit,
-    onEliminarParqueVisitado: (ParqueVistoDB) -> Unit
+fun EspeciesVistas(
+    listaEspeciesVistas: List<EspecieVistaDB>,
+    onEditarEspecieVista: (EspecieVistaDB) -> Unit,
+    onEliminarEspecieVista: (EspecieVistaDB) -> Unit
 )
 {
     var mostrarDialogo by remember { mutableStateOf(false) }
-    var parqueVisitadoAEliminar by remember { mutableStateOf<ParqueVistoDB?>(null) }
-
+    var especieVistaAEliminar by remember { mutableStateOf<EspecieVistaDB?>(null) }
     LazyColumn(
         modifier = Modifier.padding(16.dp),
 
         ) {
-        items(listaParquesVisitados) { parque ->
+        items(listaEspeciesVistas) { especie ->
             Card(
                 modifier = Modifier
                     .padding(6.dp)
                     .fillParentMaxWidth()
                     .combinedClickable(
-                        onClick = { onEditarParque(parque) },
-                        onLongClick = {
-                            parqueVisitadoAEliminar = parque
-                            mostrarDialogo = true
-                        }
+                        onClick = { onEditarEspecieVista(especie) },
+                        onLongClick = { especieVistaAEliminar = especie
+                        mostrarDialogo = true}
                     )
+
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.width(250.dp)) {
                         Text(
-                            stringResource(R.string.nombreBien) + parque.nombre + "\n"+stringResource(R.string.puntuaci_n)+" " + parque.puntuacion,
+                            stringResource(R.string.nombreBien) + especie.nombre + stringResource(R.string.cantidad_vista) + especie.cantidadVista,
                             modifier = Modifier.padding(16.dp)
                         )
                     }
                     Column (modifier = Modifier
                         .width(250.dp)
                         .padding(16.dp), horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.Center){
-                        if(parque.favorito) {
+                        if(especie.favorito) {
                             Icon(
                                 painter = painterResource(R.drawable.estrellallena),
                                 contentDescription = stringResource(R.string.favorito)
@@ -85,11 +83,11 @@ fun ParquesVisitados(
                     onDismissRequest = {
                         mostrarDialogo = false
                     },
-                    title = { Text(text = stringResource(R.string.eliminar_visita)) },
+                    title = { Text(text = stringResource(R.string.eliminar_avistamiento)) },
                     text = {
                         Text(
-                            text = stringResource(R.string.est_seguro_de_eliminar_la_visita_a) +
-                                    parqueVisitadoAEliminar!!.nombre + "?"
+                            text = stringResource(R.string.est_seguro_de_eliminar_a) +
+                                    especieVistaAEliminar!!.nombre + "?"
                         )
                     },
                     dismissButton = {
@@ -104,7 +102,7 @@ fun ParquesVisitados(
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                onEliminarParqueVisitado(parqueVisitadoAEliminar!!)
+                                onEliminarEspecieVista(especieVistaAEliminar!!)
                                 mostrarDialogo = false
                             }
                         ) {

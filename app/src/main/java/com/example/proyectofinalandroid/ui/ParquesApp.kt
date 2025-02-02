@@ -11,16 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Place
@@ -60,8 +57,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.DrawerMenu
 import com.example.proyectofinalandroid.modelo.Ruta
+import com.example.proyectofinalandroid.ui.pantallas.AnyadirEspecieVista
 import com.example.proyectofinalandroid.ui.pantallas.EditarEspecie
+import com.example.proyectofinalandroid.ui.pantallas.EditarEspecieVista
 import com.example.proyectofinalandroid.ui.pantallas.EditarParque
+import com.example.proyectofinalandroid.ui.pantallas.EditarParqueVisitado
+import com.example.proyectofinalandroid.ui.pantallas.EspeciesVistas
+import com.example.proyectofinalandroid.ui.pantallas.InsertarEspecie
 import com.example.proyectofinalandroid.ui.pantallas.InsertarParque
 import com.example.proyectofinalandroid.ui.pantallas.ListaEspecies
 import com.example.proyectofinalandroid.ui.pantallas.ListaParques
@@ -73,16 +75,22 @@ import kotlinx.coroutines.launch
 
 enum class Pantallas(@StringRes val titulo: Int){
     Inicio(titulo = R.string.inicio),
+
+    // PANTALLAS PARQUES
     ListarParques(titulo= R.string.parques),
     EditarParque(titulo= R.string.editar_parque),
     InsertarParque(titulo= R.string.nuevo_parque),
     InsertarParqueVisitado(titulo= R.string.nueva_visita),
     ListarParquesVisitados(titulo= R.string.parques_visitados),
+    EditarParqueVisitado(titulo= R.string.editar_visita),
 
+    // PANTALLAS ESPECIES
     ListarEspecies(titulo = R.string.especies),
     EditarEspecie(titulo = R.string.editarespecie),
-    ParquesVisitados(titulo = R.string.parques_visitados),
-    EspeciesVistas(titulo = R.string.especies_vistas)
+    InsertarEspecie(titulo = R.string.nueva_especie),
+    EspeciesVistas(titulo = R.string.especies_vistas),
+    InsertarEspecieVista(titulo= R.string.insertar_especie_vista),
+    EditarEspecieVista(titulo= R.string.editar_avistamiento)
 }
 
 val listaRutas = listOf(
@@ -193,7 +201,8 @@ fun ParquesApp(
                            navController.navigate(Pantallas.EditarParque.name)},
                            onInsertarNuevoParque = {navController.navigate(Pantallas.InsertarParque.name)},
                            onAnyadirNuevaVisita = {viewModel.actualizarParquePulsado(it)
-                               navController.navigate(Pantallas.InsertarParqueVisitado.name)}
+                               navController.navigate(Pantallas.InsertarParqueVisitado.name)},
+                           onEliminarParque = {viewModel.eliminarParque(it)}
                        )
                    }
                     viewModel.obtenerParques()
@@ -226,10 +235,20 @@ fun ParquesApp(
                     viewModel.obtenerParquesVistosDB()
                     if(uiState is ParquesUIState.ObtenerExitoParquesVistos) {
                         ParquesVisitados(
-                           // listaParquesVisitados = uiState.parquesVistos
+                           listaParquesVisitados = uiState.parquesVistos,
+                            onEditarParque = {viewModel.actualizarParqueDBPulsado(it)
+                            navController.navigate(Pantallas.EditarParqueVisitado.name)},
+                            onEliminarParqueVisitado = {viewModel.eliminarParqueBD(it)}
                         )
                     }
-                    viewModel.obtenerParques()
+                }
+                composable(route = Pantallas.EditarParqueVisitado.name) {
+                        EditarParqueVisitado (
+                            parque = viewModel.parqueVistoDBPulsado,
+                            onActualizarParque = {viewModel.actualizarParqueBD(it)
+                            navController.navigate(Pantallas.ListarParquesVisitados.name)}
+                        )
+
                 }
 
         // ---------------------------- ESPECIES ---------------------------------
@@ -240,9 +259,21 @@ fun ParquesApp(
                         ListaEspecies(
                             listaEspecies = uiState.especies,
                             onEspeciePulsada = { viewModel.actualizarEspeciePulsada(it)
-                            navController.navigate((Pantallas.EditarEspecie.name))}
+                            navController.navigate((Pantallas.EditarEspecie.name))},
+                            onAnyadirAvistamiento = {viewModel.actualizarEspeciePulsada(it)
+                            navController.navigate(Pantallas.InsertarEspecieVista.name)},
+                            onAnyadirEspecie = {navController.navigate(Pantallas.InsertarEspecie.name)},
+                            onEliminarEspecie = {viewModel.eliminarEspecie(it)}
                         )
                     }
+                }
+                composable(route = Pantallas.InsertarEspecie.name) {
+                    viewModel.obtenerParques()
+                    InsertarEspecie(
+                        onInsertarEspecie = {viewModel.insertarEspecie(it)
+                            viewModel.obtenerEspecies()
+                            navController.navigate(Pantallas.ListarEspecies.name)}
+                    )
                 }
                 composable(route = Pantallas.EditarEspecie.name) {
                     viewModel.obtenerParques()
@@ -253,15 +284,30 @@ fun ParquesApp(
                             navController.navigate(Pantallas.ListarEspecies.name)}
                     )
                 }
-                composable(route = Pantallas.ParquesVisitados.name) {
-                    /*PantallaInicio(
-
-                )*/
+                composable(route = Pantallas.InsertarEspecieVista.name) {
+                    AnyadirEspecieVista(
+                        especie = viewModel.especiePulsada,
+                        onAnyadirEspecie = {viewModel.insertarEspecieBD(it)
+                        navController.navigate(Pantallas.ListarEspecies.name)}
+                )
                 }
                 composable(route = Pantallas.EspeciesVistas.name) {
-                    /*PantallaInicio(
-
-                )*/
+                    viewModel.obtenerEspeciesVistasDB()
+                    if(uiState is ParquesUIState.ObtenerExitoEspeciesVistas) {
+                        EspeciesVistas(
+                            listaEspeciesVistas = uiState.especiesVistas,
+                            onEditarEspecieVista = {viewModel.actualizarEspecieDBPulsada(it)
+                                navController.navigate(Pantallas.EditarEspecieVista.name)},
+                            onEliminarEspecieVista = {viewModel.eliminarEspecieVista(it)}
+                        )
+                    }
+                }
+                composable(route = Pantallas.EditarEspecieVista.name) {
+                    EditarEspecieVista(
+                        especie = viewModel.especieVistaDBPulsada,
+                        onActualizarAvistamiento = {viewModel.actualizarEspecieBD(it)
+                            navController.navigate(Pantallas.EspeciesVistas.name)}
+                    )
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.example.proyectofinalandroid.ui.pantallas
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,13 +11,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,14 +32,20 @@ import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.Parque
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListaParques(
     listaParques: List<Parque>,
     onParquePulsado: (Parque) -> Unit,
     onInsertarNuevoParque:() -> Unit,
-    onAnyadirNuevaVisita:(Parque) -> Unit
+    onAnyadirNuevaVisita:(Parque) -> Unit,
+    onEliminarParque:(Int) -> Unit
+
 )
 {
+    var mostrarDialogo by remember { mutableStateOf(false) }
+    var parqueAEliminar by remember { mutableStateOf<Parque?>(null) }
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -54,9 +67,11 @@ fun ListaParques(
                     modifier = Modifier
                         .padding(6.dp)
                         .fillParentMaxWidth()
-                        .clickable {
-                            onParquePulsado(parque)
-                        }
+                        .combinedClickable (
+                            onClick = {onParquePulsado(parque)},
+                            onLongClick = {parqueAEliminar=parque
+                            mostrarDialogo=true}
+                        )
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.width(250.dp)) {
@@ -78,4 +93,38 @@ fun ListaParques(
             }
         }
     }
+    if (mostrarDialogo) {
+        AlertDialog(
+            onDismissRequest = {
+                mostrarDialogo = false
+            },
+            title = { Text(text = stringResource(R.string.eliminar_avistamiento)) },
+            text = {
+                Text(
+                    text = stringResource(R.string.est_seguro_de_eliminar_a) +
+                            parqueAEliminar!!.nombre + "?"
+                )
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        mostrarDialogo = false
+                    }
+                ) {
+                    Text(text = "No")
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onEliminarParque(parqueAEliminar!!.id)
+                        mostrarDialogo = false
+                    }
+                ) {
+                    Text(text = "Sí")
+                }
+            }
+        )
+    }
+
 }
