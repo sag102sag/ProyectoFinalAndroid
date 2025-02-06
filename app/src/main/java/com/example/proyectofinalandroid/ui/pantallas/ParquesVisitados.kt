@@ -26,10 +26,34 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.ParqueVistoDB
+import com.example.proyectofinalandroid.ui.ParquesUIState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ParquesVisitados(
+    uiState: ParquesUIState,
+    onEditarParque: (ParqueVistoDB) -> Unit,
+    onEliminarParqueVisitado: (ParqueVistoDB) -> Unit,
+    onObtenerParquesVistos:() -> Unit
+)
+{
+    when(uiState)
+    {
+        is ParquesUIState.ObtenerExitoParquesVistos -> {
+            ParquesVisitados2(
+                listaParquesVisitados = uiState.parquesVistos,
+                onEditarParque = onEditarParque,
+                onEliminarParqueVisitado = onEliminarParqueVisitado
+            )
+        }
+        is ParquesUIState.Cargando -> Unit
+        else -> onObtenerParquesVistos()
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ParquesVisitados2(
     listaParquesVisitados: List<ParqueVistoDB>,
     onEditarParque: (ParqueVistoDB) -> Unit,
     onEliminarParqueVisitado: (ParqueVistoDB) -> Unit

@@ -48,7 +48,7 @@ class ParquesViewModel(
     var especiePulsada: Especie by mutableStateOf(Especie(0,))
         private set
 
-    var parquePulsado: Parque by mutableStateOf(Parque(0,))
+    var parquePulsado: Parque by mutableStateOf(Parque(0))
         private set
 
     var especieVistaDBPulsada: EspecieVistaDB by mutableStateOf(EspecieVistaDB())
@@ -57,11 +57,6 @@ class ParquesViewModel(
     var parqueVistoDBPulsado: ParqueVistoDB by mutableStateOf(ParqueVistoDB())
         private set
 
-    init {
-        obtenerParques()
-        obtenerEspecies()
-
-    }
 
     fun actualizarParquePulsado(parque: Parque)
     {
@@ -84,12 +79,17 @@ class ParquesViewModel(
     }
 
 
+    init {
+        obtenerParques()
+    }
+
     // ------------------------------- OBTENCION DE PARQUES -------------------------------
 
     // SERVER
     fun obtenerParques()
     {
         viewModelScope.launch {
+            parquesUIState = ParquesUIState.Cargando
             parquesUIState = try {
                 val lista = parqueRepositorio.obtenerParques()
                 ParquesUIState.ObtenerExitoParques(lista)
@@ -101,6 +101,7 @@ class ParquesViewModel(
 
     fun obtenerParque(id: Int)
     {
+        parquesUIState = ParquesUIState.Cargando
         viewModelScope.launch {
             parquesUIState = try {
                 val parque = parqueRepositorio.obtenerParque(id)
@@ -115,6 +116,7 @@ class ParquesViewModel(
     // INTERNOS
     fun obtenerParquesVistosDB()
     {
+        parquesUIState = ParquesUIState.Cargando
         viewModelScope.launch {
             parquesUIState = try {
                 val lista = parqueRepositorioDB.obtenerTodosParques()

@@ -31,10 +31,37 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.Parque
+import com.example.proyectofinalandroid.ui.ParquesUIState
+
+@Composable
+fun ListaParques(
+    uiState: ParquesUIState,
+    onParquePulsado: (Parque) -> Unit,
+    onInsertarNuevoParque:() -> Unit,
+    onAnyadirNuevaVisita:(Parque) -> Unit,
+    onEliminarParque:(Int) -> Unit,
+    onObtenerParques:() ->Unit
+){
+    when(uiState)
+    {
+        is ParquesUIState.ObtenerExitoParques -> {
+            ListaParques2(
+                listaParques=uiState.parques,
+            onParquePulsado= onParquePulsado,
+            onInsertarNuevoParque=onInsertarNuevoParque,
+            onAnyadirNuevaVisita=onAnyadirNuevaVisita,
+            onEliminarParque=onEliminarParque
+            )
+        }
+        is ParquesUIState.Cargando -> Unit
+        else -> onObtenerParques()
+    }
+}
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ListaParques(
+fun ListaParques2(
     listaParques: List<Parque>,
     onParquePulsado: (Parque) -> Unit,
     onInsertarNuevoParque:() -> Unit,

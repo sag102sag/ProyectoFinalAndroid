@@ -26,10 +26,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.EspecieVistaDB
+import com.example.proyectofinalandroid.ui.ParquesUIState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EspeciesVistas(
+    uiState: ParquesUIState,
+    onEditarEspecieVista: (EspecieVistaDB) -> Unit,
+    onEliminarEspecieVista: (EspecieVistaDB) -> Unit,
+    onObtenerEspeciesVistas:() -> Unit
+)
+{
+    when(uiState){
+        is ParquesUIState.ObtenerExitoEspeciesVistas -> {
+            EspeciesVistas2(
+                listaEspeciesVistas = uiState.especiesVistas,
+                onEditarEspecieVista = onEditarEspecieVista,
+                onEliminarEspecieVista = onEliminarEspecieVista
+            )
+        }
+        is ParquesUIState.Cargando -> Unit
+        else -> onObtenerEspeciesVistas()
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun EspeciesVistas2(
     listaEspeciesVistas: List<EspecieVistaDB>,
     onEditarEspecieVista: (EspecieVistaDB) -> Unit,
     onEliminarEspecieVista: (EspecieVistaDB) -> Unit

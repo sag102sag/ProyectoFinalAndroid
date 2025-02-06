@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.Parque
 
-
 @Composable
 fun EditarParque(
     parque: Parque,

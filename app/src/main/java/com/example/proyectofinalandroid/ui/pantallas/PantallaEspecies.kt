@@ -31,11 +31,38 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.proyectofinalandroid.R
 import com.example.proyectofinalandroid.modelo.Especie
+import com.example.proyectofinalandroid.ui.ParquesUIState
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListaEspecies(
+    uiState: ParquesUIState,
+    onEspeciePulsada: (Especie) -> Unit,
+    onAnyadirAvistamiento: (Especie) -> Unit,
+    onAnyadirEspecie: () -> Unit,
+    onEliminarEspecie: (Int) -> Unit,
+    onCargarEspeces: () -> Unit
+){
+
+    when(uiState){
+        is ParquesUIState.ObtenerExitoEspecies -> {
+            ListaEspecies2(
+                listaEspecies = uiState.especies,
+                onEspeciePulsada = onEspeciePulsada,
+                onAnyadirEspecie = onAnyadirEspecie,
+                onAnyadirAvistamiento = onAnyadirAvistamiento,
+                onEliminarEspecie = onEliminarEspecie
+            )
+        }
+        else -> onCargarEspeces()
+    }
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ListaEspecies2(
     listaEspecies: List<Especie>,
     onEspeciePulsada: (Especie) -> Unit,
     onAnyadirAvistamiento: (Especie) -> Unit,

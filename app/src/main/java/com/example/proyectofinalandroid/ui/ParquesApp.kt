@@ -113,6 +113,8 @@ fun ParquesApp(
 ){
     val pilaRetroceso by navController.currentBackStackEntryAsState()
 
+    val uiState: ParquesUIState
+
     val pantallaActual = Pantallas.valueOf(
         pilaRetroceso?.destination?.route ?: Pantallas.Inicio.name
     )
@@ -130,11 +132,14 @@ fun ParquesApp(
                         drawerState.close()
                     }
 
+
                     navController.navigate(ruta)
                 }
             }
         },
-    ) { // --> Desde aquí
+    ) {
+
+        // --> Desde aquí
         Scaffold(
             /* topBar = {
             AppTopBar(
@@ -177,7 +182,7 @@ fun ParquesApp(
                 }
             },
         ) { innerPadding ->
-            val uiState = viewModel.parquesUIState
+            var uiState = viewModel.parquesUIState
 
             NavHost(
                 navController = navController,
@@ -186,132 +191,148 @@ fun ParquesApp(
             ) {
                 // Grafo de las rutas
                 composable(route = Pantallas.Inicio.name) {
-                    viewModel.obtenerParques()
                     PantallaInicio(
                         appUIState = uiState
                     )
                 }
-    // ---------------------------- PARQUES ---------------------------------
+                // ---------------------------- PARQUES ---------------------------------
                 composable(route = Pantallas.ListarParques.name) {
-
-                   if(uiState is ParquesUIState.ObtenerExitoParques) {
-                       ListaParques(
-                           listaParques = uiState.parques,
-                           onParquePulsado = {viewModel.actualizarParquePulsado(it)
-                           navController.navigate(Pantallas.EditarParque.name)},
-                           onInsertarNuevoParque = {navController.navigate(Pantallas.InsertarParque.name)},
-                           onAnyadirNuevaVisita = {viewModel.actualizarParquePulsado(it)
-                               navController.navigate(Pantallas.InsertarParqueVisitado.name)},
-                           onEliminarParque = {viewModel.eliminarParque(it)}
-                       )
-                   }
-                    viewModel.obtenerParques()
+                        ListaParques(
+                            uiState=uiState,
+                            onParquePulsado = {
+                                viewModel.actualizarParquePulsado(it)
+                                navController.navigate(Pantallas.EditarParque.name)
+                            },
+                            onInsertarNuevoParque = { navController.navigate(Pantallas.InsertarParque.name) },
+                            onAnyadirNuevaVisita = {
+                                viewModel.actualizarParquePulsado(it)
+                                navController.navigate(Pantallas.InsertarParqueVisitado.name)
+                            },
+                            onEliminarParque = { viewModel.eliminarParque(it) },
+                            onObtenerParques = {viewModel.obtenerParques()}
+                        )
                 }
                 composable(route = Pantallas.EditarParque.name) {
                     EditarParque(
-                    parque = viewModel.parquePulsado,
-                        onActualizarParque = {viewModel.actualizarParque(it.id, it)
-                        viewModel.obtenerParques()
-                        navController.navigate(Pantallas.ListarParques.name)}
-                )
+                        parque = viewModel.parquePulsado,
+                        onActualizarParque = {
+                            viewModel.actualizarParque(it.id, it)
+                            viewModel.obtenerParques()
+                            navController.navigate(Pantallas.ListarParques.name)
+                        }
+                    )
                 }
                 composable(route = Pantallas.InsertarParque.name) {
-                    viewModel.obtenerParques()
                     InsertarParque(
-                        onInsertarParque = {viewModel.insertarParque(it)
+                        onInsertarParque = {
+                            viewModel.insertarParque(it)
                             viewModel.obtenerParques()
-                            navController.navigate(Pantallas.ListarParques.name)}
+                            navController.navigate(Pantallas.ListarParques.name)
+                        }
                     )
                 }
                 composable(route = Pantallas.InsertarParqueVisitado.name) {
-                    viewModel.obtenerParques()
                     NuevaVisitaParqueDB(
                         parque = viewModel.parquePulsado,
-                        onAnyadirParque = {viewModel.insertarParqueBD(it)
-                        navController.navigate(Pantallas.ListarParques.name)}
+                        onAnyadirParque = {
+                            viewModel.insertarParqueBD(it)
+                            navController.navigate(Pantallas.ListarParques.name)
+                        }
                     )
                 }
                 composable(route = Pantallas.ListarParquesVisitados.name) {
-                    viewModel.obtenerParquesVistosDB()
-                    if(uiState is ParquesUIState.ObtenerExitoParquesVistos) {
                         ParquesVisitados(
-                           listaParquesVisitados = uiState.parquesVistos,
-                            onEditarParque = {viewModel.actualizarParqueDBPulsado(it)
-                            navController.navigate(Pantallas.EditarParqueVisitado.name)},
-                            onEliminarParqueVisitado = {viewModel.eliminarParqueBD(it)}
+                            uiState=uiState,
+                            onEditarParque = {
+                                viewModel.actualizarParqueDBPulsado(it)
+                                navController.navigate(Pantallas.EditarParqueVisitado.name)
+                            },
+                            onEliminarParqueVisitado = { viewModel.eliminarParqueBD(it) },
+                            onObtenerParquesVistos = {viewModel.obtenerParquesVistosDB()}
                         )
-                    }
                 }
                 composable(route = Pantallas.EditarParqueVisitado.name) {
-                        EditarParqueVisitado (
-                            parque = viewModel.parqueVistoDBPulsado,
-                            onActualizarParque = {viewModel.actualizarParqueBD(it)
-                            navController.navigate(Pantallas.ListarParquesVisitados.name)}
-                        )
+                    EditarParqueVisitado(
+                        parque = viewModel.parqueVistoDBPulsado,
+                        onActualizarParque = {
+                            viewModel.actualizarParqueBD(it)
+                            navController.navigate(Pantallas.ListarParquesVisitados.name)
+                        }
+                    )
 
                 }
 
-        // ---------------------------- ESPECIES ---------------------------------
+                // ---------------------------- ESPECIES ---------------------------------
 
                 composable(route = Pantallas.ListarEspecies.name) {
-                    viewModel.obtenerEspecies()
-                    if(uiState is ParquesUIState.ObtenerExitoEspecies) {
                         ListaEspecies(
-                            listaEspecies = uiState.especies,
-                            onEspeciePulsada = { viewModel.actualizarEspeciePulsada(it)
-                            navController.navigate((Pantallas.EditarEspecie.name))},
-                            onAnyadirAvistamiento = {viewModel.actualizarEspeciePulsada(it)
-                            navController.navigate(Pantallas.InsertarEspecieVista.name)},
-                            onAnyadirEspecie = {navController.navigate(Pantallas.InsertarEspecie.name)},
-                            onEliminarEspecie = {viewModel.eliminarEspecie(it)}
+                            uiState = uiState,
+                            onEspeciePulsada = {
+                                viewModel.actualizarEspeciePulsada(it)
+                                navController.navigate((Pantallas.EditarEspecie.name))
+                            },
+                            onAnyadirAvistamiento = {
+                                viewModel.actualizarEspeciePulsada(it)
+                                navController.navigate(Pantallas.InsertarEspecieVista.name)
+                            },
+                            onAnyadirEspecie = { navController.navigate(Pantallas.InsertarEspecie.name) },
+                            onEliminarEspecie = { viewModel.eliminarEspecie(it) },
+                            onCargarEspeces = {viewModel.obtenerEspecies()}
                         )
-                    }
+
                 }
                 composable(route = Pantallas.InsertarEspecie.name) {
-                    viewModel.obtenerParques()
                     InsertarEspecie(
-                        onInsertarEspecie = {viewModel.insertarEspecie(it)
+                        onInsertarEspecie = {
+                            viewModel.insertarEspecie(it)
                             viewModel.obtenerEspecies()
-                            navController.navigate(Pantallas.ListarEspecies.name)}
+                            navController.navigate(Pantallas.ListarEspecies.name)
+                        }
                     )
                 }
                 composable(route = Pantallas.EditarEspecie.name) {
-                    viewModel.obtenerParques()
                     EditarEspecie(
                         especie = viewModel.especiePulsada,
-                        onActualizarEspecie = {viewModel.actualizarEspecie(it.id, it)
+                        onActualizarEspecie = {
+                            viewModel.actualizarEspecie(it.id, it)
                             viewModel.obtenerEspecies()
-                            navController.navigate(Pantallas.ListarEspecies.name)}
+                            navController.navigate(Pantallas.ListarEspecies.name)
+                        }
                     )
                 }
                 composable(route = Pantallas.InsertarEspecieVista.name) {
                     AnyadirEspecieVista(
                         especie = viewModel.especiePulsada,
-                        onAnyadirEspecie = {viewModel.insertarEspecieBD(it)
-                        navController.navigate(Pantallas.ListarEspecies.name)}
-                )
+                        onAnyadirEspecie = {
+                            viewModel.insertarEspecieBD(it)
+                            navController.navigate(Pantallas.ListarEspecies.name)
+                        }
+                    )
                 }
                 composable(route = Pantallas.EspeciesVistas.name) {
-                    viewModel.obtenerEspeciesVistasDB()
-                    if(uiState is ParquesUIState.ObtenerExitoEspeciesVistas) {
                         EspeciesVistas(
-                            listaEspeciesVistas = uiState.especiesVistas,
-                            onEditarEspecieVista = {viewModel.actualizarEspecieDBPulsada(it)
-                                navController.navigate(Pantallas.EditarEspecieVista.name)},
-                            onEliminarEspecieVista = {viewModel.eliminarEspecieVista(it)}
+                            uiState=uiState,
+                            onEditarEspecieVista = {
+                                viewModel.actualizarEspecieDBPulsada(it)
+                                navController.navigate(Pantallas.EditarEspecieVista.name)
+                            },
+                            onEliminarEspecieVista = { viewModel.eliminarEspecieVista(it) },
+                            onObtenerEspeciesVistas = {viewModel.obtenerEspeciesVistasDB()}
                         )
-                    }
+
                 }
                 composable(route = Pantallas.EditarEspecieVista.name) {
                     EditarEspecieVista(
                         especie = viewModel.especieVistaDBPulsada,
-                        onActualizarAvistamiento = {viewModel.actualizarEspecieBD(it)
-                            navController.navigate(Pantallas.EspeciesVistas.name)}
+                        onActualizarAvistamiento = {
+                            viewModel.actualizarEspecieBD(it)
+                            navController.navigate(Pantallas.EspeciesVistas.name)
+                        }
                     )
                 }
             }
         }
-    } // --> Hasta aquí
+    }// --> Hasta aquí
 }
 /*
 @OptIn(ExperimentalMaterial3Api::class)
@@ -391,18 +412,21 @@ fun AppTopBar(
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        navigationIcon = {
+
+       navigationIcon = {
             if (drawerState != null) {
-                IconButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            drawerState.open()
-                        }
-                    }) {
-                    Icon(
-                        imageVector = Icons.Filled.Menu,
-                        contentDescription = stringResource(id = R.string.atras)
-                    )
+                if(true){
+                    IconButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                drawerState.open()
+                            }
+                        }) {
+                        Icon(
+                            imageVector = Icons.Filled.Menu,
+                            contentDescription = stringResource(id = R.string.atras)
+                        )
+                    }
                 }
             }
         },
