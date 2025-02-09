@@ -45,6 +45,15 @@ class ParquesViewModel(
     var parquesUIState: ParquesUIState by mutableStateOf(ParquesUIState.Cargando)
         private set
 
+    var especiesUIState: ParquesUIState by mutableStateOf(ParquesUIState.Cargando)
+        private set
+
+    var parquesDBUIState: ParquesUIState by mutableStateOf(ParquesUIState.Cargando)
+        private set
+
+    var especiesDBUIState: ParquesUIState by mutableStateOf(ParquesUIState.Cargando)
+        private set
+
     var especiePulsada: Especie by mutableStateOf(Especie(0,))
         private set
 
@@ -81,6 +90,9 @@ class ParquesViewModel(
 
     init {
         obtenerParques()
+        obtenerEspecies()
+        obtenerParquesVistosDB()
+        obtenerEspeciesVistasDB()
     }
 
     // ------------------------------- OBTENCION DE PARQUES -------------------------------
@@ -89,7 +101,6 @@ class ParquesViewModel(
     fun obtenerParques()
     {
         viewModelScope.launch {
-            parquesUIState = ParquesUIState.Cargando
             parquesUIState = try {
                 val lista = parqueRepositorio.obtenerParques()
                 ParquesUIState.ObtenerExitoParques(lista)
@@ -116,9 +127,9 @@ class ParquesViewModel(
     // INTERNOS
     fun obtenerParquesVistosDB()
     {
-        parquesUIState = ParquesUIState.Cargando
+        parquesDBUIState = ParquesUIState.Cargando
         viewModelScope.launch {
-            parquesUIState = try {
+            parquesDBUIState = try {
                 val lista = parqueRepositorioDB.obtenerTodosParques()
                 ParquesUIState.ObtenerExitoParquesVistos(lista)
             }catch (e: Exception) {
@@ -146,7 +157,7 @@ class ParquesViewModel(
     fun obtenerEspecies()
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            especiesUIState = try {
                 val lista = parqueRepositorio.obtenerEspecies()
                 ParquesUIState.ObtenerExitoEspecies(lista)
             }catch (e: Exception) {
@@ -172,7 +183,8 @@ class ParquesViewModel(
     fun obtenerEspeciesVistasDB()
     {
         viewModelScope.launch {
-            parquesUIState = try {
+
+            especiesDBUIState = try {
                 val lista = parqueRepositorioDB.obtenerTodasEspecies()
                 ParquesUIState.ObtenerExitoEspeciesVistas(lista)
             }catch (e: Exception) {
@@ -237,7 +249,7 @@ class ParquesViewModel(
     fun insertarParqueBD(parqueVistoDB: ParqueVistoDB)
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            parquesDBUIState = try {
                 parqueRepositorioDB.insertarParque(parqueVistoDB)
                 ParquesUIState.CrearExito
             } catch (e: Exception) {
@@ -249,7 +261,7 @@ class ParquesViewModel(
     fun actualizarParqueBD(parqueVistoDB: ParqueVistoDB)
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            parquesDBUIState = try {
                 parqueRepositorioDB.actualizarParque(parqueVistoDB)
                 ParquesUIState.ActualizarExito
             } catch (e: Exception) {
@@ -261,7 +273,7 @@ class ParquesViewModel(
     fun eliminarParqueBD(parqueVistoDB: ParqueVistoDB)
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            parquesDBUIState = try {
                 parqueRepositorioDB.eliminarParque(parqueVistoDB)
                 ParquesUIState.EliminarExito
             } catch (e: Exception) {
@@ -275,7 +287,7 @@ class ParquesViewModel(
     fun insertarEspecie(especie: Especie)
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            especiesUIState = try {
                 parqueRepositorio.insertarEspecie(especie)
                 ParquesUIState.CrearExito
             } catch (e: Exception) {
@@ -287,7 +299,7 @@ class ParquesViewModel(
     fun actualizarEspecie(id: Int, especie: Especie)
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            especiesUIState = try {
                 parqueRepositorio.actualizarEspecie(id, especie)
                 ParquesUIState.ActualizarExito
             } catch (e: Exception) {
@@ -299,7 +311,7 @@ class ParquesViewModel(
     fun eliminarEspecie(id: Int)
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            especiesUIState = try {
                 parqueRepositorio.eliminarEspecie(id)
                 ParquesUIState.EliminarExito
             } catch (e: Exception) {
@@ -311,7 +323,7 @@ class ParquesViewModel(
     fun insertarEspecieBD(especieVistaDB: EspecieVistaDB)
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            especiesDBUIState = try {
                 parqueRepositorioDB.insertarEspecie(especieVistaDB)
                 ParquesUIState.CrearExito
             } catch (e: Exception) {
@@ -323,7 +335,7 @@ class ParquesViewModel(
     fun actualizarEspecieBD(especieVistaDB: EspecieVistaDB)
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            especiesDBUIState = try {
                 parqueRepositorioDB.actualizarEspecie(especieVistaDB)
                 ParquesUIState.ActualizarExito
             } catch (e: Exception) {
@@ -335,7 +347,7 @@ class ParquesViewModel(
     fun eliminarEspecieVista(especieVistaDB: EspecieVistaDB)
     {
         viewModelScope.launch {
-            parquesUIState = try {
+            especiesDBUIState = try {
                 parqueRepositorioDB.eliminarEspecie(especieVistaDB)
                 ParquesUIState.EliminarExito
             } catch (e: Exception) {

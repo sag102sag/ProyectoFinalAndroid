@@ -53,7 +53,6 @@ fun ListaParques(
             onEliminarParque=onEliminarParque
             )
         }
-        is ParquesUIState.Cargando -> Unit
         else -> onObtenerParques()
     }
 }

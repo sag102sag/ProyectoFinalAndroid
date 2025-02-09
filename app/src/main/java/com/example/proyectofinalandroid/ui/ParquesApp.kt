@@ -182,7 +182,10 @@ fun ParquesApp(
                 }
             },
         ) { innerPadding ->
-            var uiState = viewModel.parquesUIState
+            var parquesUIState = viewModel.parquesUIState
+            var parquesDBUIState = viewModel.parquesDBUIState
+            var especiesUIState = viewModel.especiesUIState
+            var especiesDBUIState = viewModel.especiesDBUIState
 
             NavHost(
                 navController = navController,
@@ -192,13 +195,13 @@ fun ParquesApp(
                 // Grafo de las rutas
                 composable(route = Pantallas.Inicio.name) {
                     PantallaInicio(
-                        appUIState = uiState
+                        appUIState = parquesUIState
                     )
                 }
                 // ---------------------------- PARQUES ---------------------------------
                 composable(route = Pantallas.ListarParques.name) {
                         ListaParques(
-                            uiState=uiState,
+                            uiState=parquesUIState,
                             onParquePulsado = {
                                 viewModel.actualizarParquePulsado(it)
                                 navController.navigate(Pantallas.EditarParque.name)
@@ -242,7 +245,7 @@ fun ParquesApp(
                 }
                 composable(route = Pantallas.ListarParquesVisitados.name) {
                         ParquesVisitados(
-                            uiState=uiState,
+                            uiState=parquesDBUIState,
                             onEditarParque = {
                                 viewModel.actualizarParqueDBPulsado(it)
                                 navController.navigate(Pantallas.EditarParqueVisitado.name)
@@ -266,7 +269,7 @@ fun ParquesApp(
 
                 composable(route = Pantallas.ListarEspecies.name) {
                         ListaEspecies(
-                            uiState = uiState,
+                            uiState = especiesUIState,
                             onEspeciePulsada = {
                                 viewModel.actualizarEspeciePulsada(it)
                                 navController.navigate((Pantallas.EditarEspecie.name))
@@ -311,7 +314,7 @@ fun ParquesApp(
                 }
                 composable(route = Pantallas.EspeciesVistas.name) {
                         EspeciesVistas(
-                            uiState=uiState,
+                            uiState=especiesDBUIState,
                             onEditarEspecieVista = {
                                 viewModel.actualizarEspecieDBPulsada(it)
                                 navController.navigate(Pantallas.EditarEspecieVista.name)
